@@ -1,7 +1,16 @@
 import { Component, Inject, Optional } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+  MatDialogModule,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,10 +31,10 @@ import { Product } from '../../models/product.interface';
     MatInputModule,
     MatButtonModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
   ],
   templateUrl: './product-form.component.html',
-  styleUrls: ['./product-form.component.scss']
+  styleUrls: ['./product-form.component.scss'],
 })
 export class ProductFormComponent {
   productForm: FormGroup;
@@ -42,28 +51,31 @@ export class ProductFormComponent {
       name: [data?.name || '', [Validators.required]],
       description: [data?.description || '', [Validators.required]],
       price: [data?.price || '', [Validators.required, Validators.min(0)]],
-      createdAt: [data?.createdAt ? new Date(data.createdAt) : new Date(), [Validators.required]]
+      createdAt: [
+        data?.createdAt ? new Date(data.createdAt) : new Date(),
+        [Validators.required],
+      ],
     });
   }
 
   onSubmit(): void {
     if (this.productForm.valid) {
       const product = this.productForm.value;
-      
+
       if (this.isEditMode && this.data?.id) {
-        this.productService.updateProduct(this.data.id, product)
+        this.productService
+          .updateProduct(this.data.id, product)
           .subscribe(() => {
             if (this.dialogRef) {
               this.dialogRef.close(true);
             }
           });
       } else {
-        this.productService.createProduct(product)
-          .subscribe(() => {
-            if (this.dialogRef) {
-              this.dialogRef.close(true);
-            }
-          });
+        this.productService.createProduct(product).subscribe(() => {
+          if (this.dialogRef) {
+            this.dialogRef.close(true);
+          }
+        });
       }
     }
   }
